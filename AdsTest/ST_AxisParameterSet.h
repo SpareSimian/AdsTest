@@ -6,17 +6,17 @@
 
 namespace TwinCAT3 {
 
-#pragma pack(push, 1)
+#pragma pack(push, 8)
 
 typedef uint32_t DWORD;
 typedef char STRING;
 typedef float REAL;
 typedef double LREAL;
-typedef short WORD;
+typedef uint16_t WORD;
 typedef uint16_t UINT;
 typedef uint32_t UDINT;
 
-typedef char T_AmsNetId[23];
+typedef char T_AmsNetId[1 + 23];
 
 enum class E_NcAxisType : DWORD
 {
@@ -98,7 +98,7 @@ union ST_AxisParameterSet
       /* AXIS: */
       DWORD AxisId;          /* 0x00000001 */
       E_NcAxisType nAxisType;   /* 0x00000003 */
-      STRING sAxisName[31];     /* 0x00000002 */
+      STRING sAxisName[1 + 31];     /* 0x00000002 */
       LREAL fAxisCycleTime;          /* 0x00000004 */
       WORD bEnablePositionAreaControl;           /* 0x0000000F */
       LREAL fPositionAreaControlRange;          /* 0x00000010 */
@@ -129,7 +129,7 @@ union ST_AxisParameterSet
       /* ENCODER: */
       DWORD nEncId;          /* 0x00010001 */
       E_NcEncoderType nEncType;/* 0x00010003 */
-      STRING sEncName[31];     /* 0x00010002 */
+      STRING sEncName[1 + 31];     /* 0x00010002 */
       LREAL fEncScaleFactorNumerator;          /* 0x00010023 */
       LREAL fEncScaleFactorDenominator;          /* 0x00010024 */
       LREAL fEncScaleFactor;          /* 0x00010006 */
@@ -154,7 +154,7 @@ union ST_AxisParameterSet
       /* CONTROLLER: */
       DWORD nCtrlId;        /* 0x00020001 */
       DWORD nCtrlType;        /* 0x00020003 */
-      STRING sCtrlName[31];   /* 0x00020002 */
+      STRING sCtrlName[1 + 31];   /* 0x00020002 */
       WORD bCtrlEnablePosDiffControl;         /* 0x00020010 */
       WORD bCtrlEnableVeloDiffControl;         /* 0x00020011 */
       LREAL fCtrlPosDiffMax;        /* 0x00020012 */
@@ -170,7 +170,7 @@ union ST_AxisParameterSet
       /* DRIVE: */
       DWORD nDriveId;        /* 0x00030001 */
       E_NcDriveType nDriveType;/* 0x00030003 */
-      STRING sDriveName[31];   /* 0x00030002 */
+      STRING sDriveName[1 + 31];   /* 0x00030002 */
       WORD bDriveIsInverse;         /* 0x00030006 */
       DWORD nDriveControlDWord;        /* 0x00030010 */
       LREAL fDriveVeloReferenz;        /* 0x00030101 */
