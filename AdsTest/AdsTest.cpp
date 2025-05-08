@@ -153,17 +153,29 @@ int main()
 
    AdsNcConnection conn;
 
-   const int axisId = 1;
+   int axisId = 1;
+   ads_i32 nErr;
+   
+#if 0
    ads_i32 axisIdRead;
-   ads_i32 nErr = AdsSyncReadReq(&conn.getAddr(), 0x4000 + axisId, 0x00000001, sizeof axisIdRead, &axisIdRead);
+   nErr = AdsSyncReadReq(&conn.getAddr(), 0x4000 + axisId, 0x00000001, sizeof axisIdRead, &axisIdRead);
    if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq", nErr));
    else std::cout << "axis ID read " << axisIdRead << '\n';
-
+#endif
+   
    TwinCAT3::ST_AxisParameterSet axisParameterSet;
+   
+   std::cout << "AXIS 1:\n";
    nErr = AdsSyncReadReq(&conn.getAddr(), 0x4000 + axisId, axisId * 0x100000, sizeof axisParameterSet, &axisParameterSet);
    if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq(ST_AxisParameterSet)", nErr));
    std::cout << axisParameterSet;
-   
+
+   axisId = 2;
+   std::cout << "AXIS 2:\n";
+   nErr = AdsSyncReadReq(&conn.getAddr(), 0x4000 + axisId, axisId * 0x100000, sizeof axisParameterSet, &axisParameterSet);
+   if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq(ST_AxisParameterSet)", nErr));
+   std::cout << axisParameterSet;
+
    AdsPortClose();
    return 0;
 }
