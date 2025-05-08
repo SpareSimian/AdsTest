@@ -7,6 +7,7 @@
 
 #include <TcAdsApi.h>
 #include "ST_AxisParameterSet.h"
+#include "ST_AxisState.h"
 
 // RAII class to release port on exceptions
 class AdsPort
@@ -143,6 +144,39 @@ std::ostream& operator<<(std::ostream& os, const TwinCAT3::ST_AxisParameterSet& 
    return os;
 };
 
+std::ostream& operator<<(std::ostream& os, const TwinCAT3::ST_AxisState& as)
+{
+   os << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
+   os << "nErrorState: " << as.nErrorState << '\n';
+   os << "reserved1: " << as.reserved1 << '\n';
+   os << "fActualPosition: " << as.fActualPosition << '\n';
+   os << "fModuloActualPosition: " << as.fModuloActualPosition << '\n';
+   os << "fSetPosition: " << as.fSetPosition << '\n';
+   os << "fModuloSetPosition: " << as.fModuloSetPosition << '\n';
+   os << "fActualVelocity: " << as.fActualVelocity << '\n';
+   os << "fSetVelocity: " << as.fSetVelocity << '\n';
+   os << "nVelocityOverride: " << as.nVelocityOverride << '\n'; // 0..1000000, 1000000 = 100%
+   os << "reserved2: " << as.reserved2 << '\n';
+   os << "fLagErrorPosition: " << as.fLagErrorPosition << '\n';
+   os << "fPeakHoldValueForMaxNegativePositionLag: " << as.fPeakHoldValueForMaxNegativePositionLag << '\n';
+   os << "fPeakHoldValueForMaxPositivePositionLag: " << as.fPeakHoldValueForMaxPositivePositionLag << '\n';
+   os << "fControllerOutputPercent: " << as.fControllerOutputPercent << '\n';
+   os << "fTotalOutputPercent: " << as.fTotalOutputPercent << '\n';
+   os << "nAxisState: " << as.nAxisState << '\n';
+   os << "nAxisControl: " << as.nAxisControl << '\n';
+   os << "nSlaveCouplingState: " << as.nSlaveCouplingState << '\n';
+   os << "nAxisControlLoopIndex: " << as.nAxisControlLoopIndex << '\n';
+   os << "fActualAcceleration: " << as.fActualAcceleration << '\n';
+   os << "fSetAcceleration: " << as.fSetAcceleration << '\n';
+   os << "fSetJerk: " << as.fSetJerk << '\n';
+   os << "fSetTorque: " << as.fSetTorque << '\n';
+   os << "fActualTorque: " << as.fActualTorque << '\n';
+   os << "fSetTorqueChange: " << as.fSetTorqueChange << '\n';
+   os << "fAdditiveSetTorque: " << as.fAdditiveSetTorque << '\n';
+   os << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
+   return os;
+}
+
 int main()
 {
    const ads_i32 nTemp = AdsGetDllVersion();
@@ -164,17 +198,16 @@ int main()
 #endif
    
    TwinCAT3::ST_AxisParameterSet axisParameterSet;
+   TwinCAT3::ST_AxisState axisState;
    
    std::cout << "AXIS 1:\n";
    nErr = AdsSyncReadReq(&conn.getAddr(), 0x4000 + axisId, axisId * 0x100000, sizeof axisParameterSet, &axisParameterSet);
-   if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq(ST_AxisParameterSet)", nErr));
+   if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq(ST_AxisParameterSet) for axis 1", nErr));
    std::cout << axisParameterSet;
 
-   axisId = 2;
-   std::cout << "AXIS 2:\n";
-   nErr = AdsSyncReadReq(&conn.getAddr(), 0x4000 + axisId, axisId * 0x100000, sizeof axisParameterSet, &axisParameterSet);
-   if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq(ST_AxisParameterSet)", nErr));
-   std::cout << axisParameterSet;
+   nErr = AdsSyncReadReq(&conn.getAddr(), 0x4100 + axisId, axisId * 0x100000, sizeof axisState, &axisState);
+   if (nErr) throw std::runtime_error(apiFailed("AdsSyncReadReq(ST_AxisState) for axis 1", nErr));
+   std::cout << axisState;
 
    AdsPortClose();
    return 0;
