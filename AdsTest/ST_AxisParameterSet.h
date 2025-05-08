@@ -8,15 +8,19 @@ namespace TwinCAT3 {
 
 #pragma pack(push, 8)
 
+// these base types make it easier to import and edit structures from PLC documentation
+
 typedef uint32_t DWORD;
-typedef char STRING;
-typedef float REAL;
-typedef double LREAL;
+typedef char STRING; // STRING types are null-terminated so we need to add a byte when importing
+typedef float REAL; // 4-byte
+typedef double LREAL; // 8-byte
 typedef uint16_t WORD;
 typedef uint16_t UINT;
 typedef uint32_t UDINT;
 
 typedef char T_AmsNetId[1 + 23];
+
+// https://infosys.beckhoff.com/english.php?content=../content/1033/tcplclib_tc2_mc2/12929722635.html&id=
 
 enum class E_NcAxisType : DWORD
 {
@@ -29,6 +33,8 @@ enum class E_NcAxisType : DWORD
    NcAxisType_TimeGenerator        = 7,
    NcAxisType_Specific             = 100
 };
+
+// https://infosys.beckhoff.com/english.php?content=../content/1033/tcplclib_tc2_mc2/12930870795.html&id=
 
 enum class E_NcEncoderType : DWORD
 {
@@ -63,6 +69,8 @@ enum class E_NcEncoderType : DWORD
      NcEncoderType_SPECIFIC
 };
 
+// https://infosys.beckhoff.com/english.php?content=../content/1033/tcplclib_tc2_mc2/12929727371.html&id=
+
 enum class E_NcDriveType : DWORD
 {
 NcDriveType_undefined            = 0,
@@ -89,6 +97,8 @@ NcDriveType_TCOM                 = 22,
 NcDriveType_MDP_733              = 23,
 NcDriveType_MDP_703              = 24
 };
+
+// https://infosys.beckhoff.com/english.php?content=../content/1033/tcplclib_tc2_mc2/70159755.html&id=
 
 union ST_AxisParameterSet
 {
